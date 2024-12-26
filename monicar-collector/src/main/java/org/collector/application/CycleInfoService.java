@@ -16,19 +16,18 @@ public class CycleInfoService {
 	private final CycleInfoRepository cycleInfoRepository;
 
 	@Transactional
-	public void cycleInfoSave(final CycleInfoRequest request) {
+	public void cycleInfoSave(CycleInfoRequest request) {
 		List<CycleInfo> cycleInfos = request.cList().stream()
-			.map(cListRequest -> CycleInfo.builder()
-				.sec(cListRequest.sec())
-				.gcd(cListRequest.gcd())
-				.lat(cListRequest.lat())
-				.lon(cListRequest.lon())
-				.ang(cListRequest.ang())
-				.spd(cListRequest.spd())
-				.sum(cListRequest.sum())
-				.bat(cListRequest.bat())
-				.build()
-			)
+			.map(cListRequest -> new CycleInfo(
+				cListRequest.sec(),
+				cListRequest.gcd(),
+				cListRequest.lat(),
+				cListRequest.lon(),
+				cListRequest.ang(),
+				cListRequest.spd(),
+				cListRequest.sum(),
+				cListRequest.bat()
+			))
 			.toList();
 
 		cycleInfoRepository.saveAll(cycleInfos);
