@@ -2,7 +2,7 @@ package org.common.dto;
 
 import java.util.List;
 
-public record CycleRequest(
+public record CycleInfoRequest(
 	String mdn,
 	String tid,
 	String mid,
