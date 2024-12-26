@@ -16,7 +16,7 @@ public class CycleInfoService {
 	private final CycleInfoRepository cycleInfoRepository;
 
 	@Transactional
-	public void cycleInfoSave(CycleInfoRequest request) {
+	public void cycleInfoSave(final CycleInfoRequest request) {
 		List<CycleInfo> cycleInfos = request.cList().stream()
 			.map(cListRequest -> new CycleInfo(
 				cListRequest.sec(),

@@ -17,7 +17,7 @@ public class CycleInfoController {
 	private final CycleInfoService cycleInfoService;
 
 	@PostMapping
-	public void cycleInfoSave(@RequestBody CycleInfoRequest request) {
+	public void cycleInfoSave(final @RequestBody CycleInfoRequest request) {
 		cycleInfoService.cycleInfoSave(request);
 	}
 }
