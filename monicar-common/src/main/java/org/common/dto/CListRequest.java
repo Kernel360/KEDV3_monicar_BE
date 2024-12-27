@@ -2,7 +2,7 @@ package org.common.dto;
 
 public record CListRequest(
 	String sec,
-	String gcd,
+	GCD gcd,
 	String lat,
 	String lon,
 	String ang,
