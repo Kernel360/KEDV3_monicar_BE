@@ -1,4 +1,4 @@
-package org.emulator.application.dto;
+package org.emulator.domain.dto;
 
 /**
  * 차량의 제어 정보 데이터를 담는 레코드

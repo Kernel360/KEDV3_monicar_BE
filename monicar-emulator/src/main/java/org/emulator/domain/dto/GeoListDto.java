@@ -1,4 +1,4 @@
-package org.emulator.application.dto;
+package org.emulator.domain.dto;
 
 public record GeoListDto (
     String geoCtrId,

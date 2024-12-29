@@ -1,4 +1,4 @@
-package org.emulator.application.dto;
+package org.emulator.infrastructure.external.command;
 
 /**
  * 차량의 시동 ON / OFF 상태에서 전달하는 데이터를 담는 레코드
@@ -17,7 +17,7 @@ package org.emulator.application.dto;
  * @param spd 속도 - 차량의 현재 속도
  * @param sum 누적 주행 거리 - 차량의 현재 총 주행 거리
  */
-public record OnOffDataDto(
+public record OffCommand(
         String mdn,
         String tid,
         String mid,

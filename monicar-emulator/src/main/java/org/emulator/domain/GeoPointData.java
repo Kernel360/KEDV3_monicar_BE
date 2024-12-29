@@ -1,4 +1,4 @@
-package org.emulator.infrastructure;
+package org.emulator.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
