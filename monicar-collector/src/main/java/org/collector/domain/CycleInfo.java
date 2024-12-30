@@ -32,4 +32,8 @@ public class CycleInfo {
 	private int spd;
 	private int sum;
 	private int bat;
+
+	public static double convertToSixDecimalPlaces(Double value) {
+		return value / 100000.0;
+	}
 }
