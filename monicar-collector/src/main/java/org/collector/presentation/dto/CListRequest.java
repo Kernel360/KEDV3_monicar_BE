@@ -47,3 +47,5 @@ public record CListRequest(
 	Integer bat
 ) {
 }
+
+
