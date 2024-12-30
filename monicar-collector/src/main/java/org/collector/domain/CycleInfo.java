@@ -1,9 +1,14 @@
 package org.collector.domain;
 
+import org.collector.presentation.dto.GCD;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,17 +18,18 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CycleInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String sec;
-	private String gcd;
-	private String lat;
-	private String lon;
-	private String ang;
-	private String spd;
-	private String sum;
-	private String bat;
+	private int sec;
+	@Enumerated(EnumType.STRING)
+	private GCD gcd;
+	private double lat;
+	private double lon;
+	private int ang;
+	private int spd;
+	private int sum;
+	private int bat;
 }

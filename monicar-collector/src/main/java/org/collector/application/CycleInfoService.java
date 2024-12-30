@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.collector.domain.CycleInfo;
 import org.collector.infrastructure.repository.CycleInfoRepository;
-import org.common.dto.CycleInfoRequest;
+import org.collector.presentation.dto.CycleInfoRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
