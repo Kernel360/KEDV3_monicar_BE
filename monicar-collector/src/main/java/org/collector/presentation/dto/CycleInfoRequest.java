@@ -1,12 +1,9 @@
 package org.collector.presentation.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.collector.common.annotation.MatchCycleSize;
 import org.hibernate.validator.constraints.Range;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -29,10 +26,6 @@ public record CycleInfoRequest(
 
 	@NotNull(message = "디바이스 ID는 필수 입력값입니다.")
 	Integer did,
-
-	@NotNull(message = "발생 시간은 필수 입력값입니다.")
-	@JsonFormat(pattern = "yyyyMMddHHmm")
-	LocalDateTime oTime,
 
 	@NotNull(message = "주기 정보 개수는 필수 입력값입니다.")
 	Integer cCnt,

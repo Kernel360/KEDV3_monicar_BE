@@ -1,17 +1,15 @@
 package org.controlcenter.common.exception;
 
-import org.controlcenter.dto.BaseResponse;
-import org.controlcenter.dto.ErrorCode;
-import org.springframework.context.MessageSourceResolvable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+
+import org.controlcenter.common.response.BaseResponse;
+import org.controlcenter.common.response.code.ErrorCode;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,82 +28,59 @@ public class GlobalExceptionHandler {
 	 * @return HTTP 상태 코드와 함께 BaseResponse 형식의 오류 응답
 	 */
 	@ExceptionHandler(BusinessException.class)
-	protected ResponseEntity<BaseResponse<Void>> handleBusinessException(final BusinessException e) {
-		return ResponseEntity
-			.status(e.getErrorCode().getStatus())
-			.body(BaseResponse.fail(e.getErrorCode()));
+	protected BaseResponse<Void> handleBusinessException(final BusinessException e) {
+		log.error("Business Exception 발생: {}", e.getMessage(), e);
+		return BaseResponse.fail(e.getErrorCode());
 	}
 
 	/**
 	 * 일반적인 모든 예외 처리 (Exception)
 	 */
 	@ExceptionHandler(Exception.class)
-	protected ResponseEntity<BaseResponse<Void>> handleGeneralException(final Exception e) {
+	protected BaseResponse<Void> handleGeneralException(final Exception e) {
 		log.error("Unhandled Exception 발생: {}", e.getMessage(), e);
-		return ResponseEntity
-			.status(HttpStatus.INTERNAL_SERVER_ERROR)
-			.body(BaseResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR));
+		return BaseResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR);
 	}
 
 	/**
-	 * enum 타입이 일치하지 않을 때 발생하는 예외 처리
-	 * RequestParam 으로 전달된 enum 타입의 값이 맞지 않을 때 주로 발생
+	 * 타입이 일치하지 않을 때 발생하는 예외 처리
+	 * RequestParam 으로 전달된 값의 타입이 맞지 않을 때 주로 발생
 	 */
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	protected ResponseEntity<BaseResponse<String>> handleMethodArgumentTypeMismatchException(
+	protected BaseResponse<String> handleMethodArgumentTypeMismatchException(
 		MethodArgumentTypeMismatchException e) {
 		log.error("MethodArgumentTypeMismatchException 예외 처리: {}", e.getMessage(), e);
-		return ResponseEntity
-			.status(HttpStatus.BAD_REQUEST)
-			.body(BaseResponse.fail(ErrorCode.INVALID_DATE));
+		return BaseResponse.fail(ErrorCode.INVALID_TYPE_VALUE);
 	}
 
-	// @Valid 실패 (개별)
-	@ExceptionHandler(HandlerMethodValidationException.class)
-	public ResponseEntity<BaseResponse<String>> handleValidationException(HandlerMethodValidationException e) {
-		// Validation 실패 메시지 추출
-		String errorMessage = e.getAllErrors()
-			.stream()
-			.findFirst()
-			.map(MessageSourceResolvable::getDefaultMessage)
-			.orElse("입력한 값의 형식이 유효하지 않습니다.");
-
-		// 에러 응답 반환
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-			.body(BaseResponse.fail(errorMessage));
-	}
-
-	// @Valid 실패
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<BaseResponse<String>> handleValidationException(MethodArgumentNotValidException e) {
-		FieldError firstError = e.getBindingResult().getFieldErrors().getFirst();
-		String errorMessage = firstError.getDefaultMessage();
+	public BaseResponse<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+		List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+		List<String> errors = fieldErrors.stream()
+			.map(fieldError -> String.format("%s : %s", fieldError.getField(), fieldError.getDefaultMessage()))
+			.toList();
 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-			.body(BaseResponse.fail(errorMessage));
+		log.error("Business Exception 발생: {}", errors, e);
+
+		return BaseResponse.fail(errors);
 	}
 
 	/**
 	 * 요청에 필수적인 Path Variable이 없을 때 발생하는 예외 처리
 	 */
 	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<BaseResponse<Void>> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+	public BaseResponse<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
 		log.error("HttpMessageNotReadableException 예외 처리 : {}", e.getMessage(), e);
-		return ResponseEntity
-			.status(HttpStatus.BAD_REQUEST)
-			.body(BaseResponse.fail(ErrorCode.EMPTY_PATH_VARIABLE));
+		return BaseResponse.fail(ErrorCode.EMPTY_PATH_VARIABLE);
 	}
 
 	/**
 	 * 지원되지 않는 HTTP 메서드로 요청할 때 발생하는 예외 처리
 	 */
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	protected ResponseEntity<BaseResponse<Void>> handleHttpRequestMethodNotSupportedException(
+	protected BaseResponse<Void> handleHttpRequestMethodNotSupportedException(
 		final HttpRequestMethodNotSupportedException e) {
 		log.error("HttpRequestMethodNotSupportedException 예외 처리 : {}", e.getMessage(), e);
-		return ResponseEntity
-			.status(HttpStatus.METHOD_NOT_ALLOWED)
-			.body(BaseResponse.fail(ErrorCode.METHOD_NOT_ALLOWED));
+		return BaseResponse.fail(ErrorCode.METHOD_NOT_ALLOWED);
 	}
-
 }

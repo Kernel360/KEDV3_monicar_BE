@@ -19,7 +19,7 @@ public class CycleInfoService {
 	public void cycleInfoSave(final CycleInfoRequest request) {
 		List<CycleInfo> cycleInfos = request.cList().stream()
 			.map(cListRequest -> CycleInfo.builder()
-				.sec(cListRequest.sec())
+				.interval_at(cListRequest.interval_at())
 				.gcd(cListRequest.gcd())
 				.lat(CycleInfo.convertToSixDecimalPlaces(cListRequest.lat()))
 				.lon(CycleInfo.convertToSixDecimalPlaces(cListRequest.lon()))

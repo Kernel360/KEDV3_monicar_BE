@@ -1,6 +1,6 @@
 package org.controlcenter.common.exception;
 
-import org.controlcenter.dto.ErrorCode;
+import org.controlcenter.common.response.code.ErrorCode;
 
 import lombok.Getter;
 
