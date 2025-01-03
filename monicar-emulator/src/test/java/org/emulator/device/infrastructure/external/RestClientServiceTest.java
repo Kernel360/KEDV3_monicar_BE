@@ -25,6 +25,7 @@ import org.springframework.web.client.RestClient;
 
 import java.time.LocalDateTime;
 
+@DisplayName("RestClientService 요청 테스트")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RestClientFactory.class)
 class RestClientServiceTest {
@@ -34,10 +35,10 @@ class RestClientServiceTest {
 
 	private ClientAndServer mockServer;
 
-	private ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	@BeforeEach
-	public void setUP() {
+	public void setUp() {
 		mockServer = ClientAndServer.startClientAndServer(8081);
 	}
 
@@ -46,7 +47,7 @@ class RestClientServiceTest {
 		mockServer.stop();
 	}
 
-	@DisplayName("시동 on 요청 성공 테스트입니다")
+	@DisplayName("post 성공 테스트")
 	@Test
 	void postKeyOn() throws Exception {
 		//given

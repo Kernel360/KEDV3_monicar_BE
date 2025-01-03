@@ -2,17 +2,14 @@ package org.emulator.device.domain;
 
 import java.time.LocalDateTime;
 
-import lombok.AllArgsConstructor;
+import org.emulator.device.VehicleConstant;
+
 import lombok.Builder;
 import lombok.Getter;
 
-import org.emulator.device.VehicleConstant;
-
-@AllArgsConstructor
 @Getter
+@Builder
 public class OnInfo {
-	private static final int DEFAULT_ZERO = 0;
-
 	private LocalDateTime onTime;
 	private LocalDateTime offTime;
 	private GpsStatus gpsStatus;
@@ -32,14 +29,15 @@ public class OnInfo {
 		long lat = (long)(latitude * VehicleConstant.MIL);
 		long lon = (long)(longitude * VehicleConstant.MIL);
 
-		return new OnInfo(
-			onTime,
-			null,
-			gpsStatus,
-			lat,
-			lon,
-			DEFAULT_ZERO,
-			DEFAULT_ZERO,
-			totalDistance);
+		return OnInfo.builder()
+			.onTime(onTime)
+			.offTime(null)
+			.gpsStatus(gpsStatus)
+			.latitude(lat)
+			.longitude(lon)
+			.direction(0)
+			.speed(0)
+			.totalDistance(totalDistance)
+			.build();
 	}
 }

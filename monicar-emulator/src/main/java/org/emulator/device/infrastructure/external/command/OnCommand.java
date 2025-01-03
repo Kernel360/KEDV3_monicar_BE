@@ -45,16 +45,16 @@ public record OnCommand(
 	public static final int TOTAL_DISTANCE_MAX = 9999999;
 
 	public static OnCommand of(OnInfo onInfo) {
-		DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-		String onTime = onInfo.getOnTime().format(DATE_TIME_FORMATTER);
+		String onTime = onInfo.getOnTime().format(dateTimeFormatter);
 		String offTime = "";
 		String lat = String.valueOf(onInfo.getLatitude());
 		String lon = String.valueOf(onInfo.getLongitude());
-		String ang = String.valueOf(Math.min(Math.max(onInfo.getDirection(), DIRECTION_MIN), DIRECTION_MAX));
-		String spd = String.valueOf(Math.min(Math.max(onInfo.getSpeed(), SPEED_MIN), SPEED_MAX));
+		String ang = String.valueOf(Math.clamp(onInfo.getDirection(), DIRECTION_MIN, DIRECTION_MAX));
+		String spd = String.valueOf(Math.clamp(onInfo.getSpeed(), SPEED_MIN, SPEED_MAX));
 		String sum = String.valueOf(
-			Math.min(Math.max(onInfo.getTotalDistance(), TOTAL_DISTANCE_MIN), TOTAL_DISTANCE_MAX));
+			Math.clamp(onInfo.getTotalDistance(), TOTAL_DISTANCE_MIN, TOTAL_DISTANCE_MAX));
 
 		return new OnCommand(
 			VehicleConstant.VEHICLE_NUM,

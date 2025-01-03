@@ -3,14 +3,15 @@ package org.emulator.device.domain;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import org.emulator.device.VehicleConstant;
 
-@AllArgsConstructor
+@Builder
 @Getter
 public class CycleInfo {
-	private LocalDateTime oTime;
+	private LocalDateTime intervalAt;
 	private GpsStatus gpsStatus;
 	private long latitude;
 	private long longitude;
@@ -20,7 +21,7 @@ public class CycleInfo {
 	private int battery;
 
 	public static CycleInfo create(
-		LocalDateTime oTime,
+		LocalDateTime intervalAt,
 		GpsStatus gpsStatus,
 		double latitude,
 		double longitude,
@@ -31,15 +32,16 @@ public class CycleInfo {
 	) {
 		long lat = (long)(latitude * VehicleConstant.MIL);
 		long lon = (long)(longitude * VehicleConstant.MIL);
-		return new CycleInfo(
-			oTime,
-			gpsStatus,
-			lat,
-			lon,
-			direction,
-			speed,
-			totalDistance,
-			battery
-		);
+
+		return CycleInfo.builder()
+			.intervalAt(intervalAt)
+			.gpsStatus(gpsStatus)
+			.latitude(lat)
+			.longitude(lon)
+			.direction(direction)
+			.speed(speed)
+			.totalDistance(totalDistance)
+			.battery(battery)
+			.build();
 	}
 }
