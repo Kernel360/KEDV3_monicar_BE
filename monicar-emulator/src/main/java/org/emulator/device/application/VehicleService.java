@@ -1,6 +1,5 @@
 package org.emulator.device.application;
 
-import java.time.LocalDateTime;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -11,7 +10,7 @@ import org.emulator.device.application.port.VehicleCommandSender;
 import org.emulator.device.domain.CycleInfo;
 import org.emulator.device.domain.GpsStatus;
 import org.emulator.device.domain.OnInfo;
-import org.emulator.pipe.Gps;
+import org.emulator.device.infrastructure.GpsTime;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -27,13 +26,13 @@ public class VehicleService {
 	private static final Deque<CycleInfo> cycleInfos = new LinkedList<>();
 
 	public void onVehicle() {
-		Gps onLocation = locationReceiver.getLocation();
+		GpsTime onLocation = locationReceiver.getLocation();
 
 		OnInfo onInfo = OnInfo.create(
-			LocalDateTime.now(),
+			onLocation.intervalAt(),
 			GpsStatus.A,
-			onLocation.lat(),
-			onLocation.lon(),
+			onLocation.location().lat(),
+			onLocation.location().lon(),
 			emulatorRepository.getTotalDistance()
 		);
 

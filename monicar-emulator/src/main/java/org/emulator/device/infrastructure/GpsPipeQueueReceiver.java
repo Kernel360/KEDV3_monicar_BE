@@ -18,15 +18,11 @@ public class GpsPipeQueueReceiver implements LocationReceiver {
 
 	@Retryable(maxAttempts = 1, backoff = @Backoff(delay = 3000))
 	@Override
-	public Gps getLocation() {
-		return Objects.requireNonNull(
+	public GpsTime getLocation() {
+		Gps gps = Objects.requireNonNull(
 			gpsPipeQueue.poll(),
 			"No Gps data found. Check sensor"
 		);
-	}
-
-	@Override
-	public boolean readyToSend() {
-		return false;
+		return GpsTime.create(gps);
 	}
 }
